@@ -24,6 +24,10 @@ class Controller extends Model{
 	  public function product_show(){
 	  	include("../View/productview.php");
 	  }
+
+	  public function test(){
+	  	echo "test";
+	  }
 }
 $obj=new Controller();
 
@@ -37,7 +41,10 @@ if(isset($_SERVER['PATH_INFO'])){
 			break;
 		case '/productview':
 			$obj->product_show();
-			break;		
+			break;	
+		case '/test':
+			$obj->test();
+			break;			
 		
 		default:
 			# code...
