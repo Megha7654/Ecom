@@ -49,28 +49,17 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>Pid</th>
-                      <th>ProductName</th>
-                      <th>Description</th>
-                      <th>Image</th>
-                      <th>Price</th>
-                      <th>Qty</th>
-                      <th colspan="2">Action</th>
+                      <th>CategoryName</th>
+                      
                     </tr>
                   </thead>
                   <tbody>
                    <?php 
-                   foreach ($productdata as $key) {
+                   foreach ($category as $key) {
                      ?>
                      <tr>
-                      <td><?php echo $key->pid ?></td>
-                       <td><?php echo $key->pname ?></td>
-                       <td><?php echo $key->description;?></td>
-                       <td><?php echo $key->image;?></td>
-                       <td><?php echo $key->price; ?></td>
-                       <td><?php echo $key->qty;?></td>
-                       <td><a href="<?php echo $this->base_url.'delete_product?pid='.$key->pid?>">DELETE</a></td>
-                       <td><a href="<?php echo $this->base_url.'update_product?pid='.$key->pid?>">UPDATE</a></td>
+                       <td><?php echo $key->cname ?></td>
+                      
                      </tr>
                      <?php
                    }

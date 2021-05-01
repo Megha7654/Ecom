@@ -1,6 +1,6 @@
 <?php 
 include("../Model/Model.php");
-
+session_start();
 class Controller extends Model{
 
       public $site_url;
@@ -23,10 +23,12 @@ class Controller extends Model{
 	  }
 
 	  public function product_show(){
+	  	$productdata=$this->select_data('product');
 	  	include("../View/productview.php");
 	  }
 	  public function addProduct(){
 	  	  if(isset($_REQUEST['pname'])){
+
 	  	  	  $pname=$_REQUEST['pname'];
 	  	  	  $desc=$_REQUEST['desc'];
 	  	  	  $qty=$_REQUEST['qty'];
@@ -35,6 +37,11 @@ class Controller extends Model{
 	  	  	  $type=$_FILES['pimage']['type'];
 	  	  	  $temp=$_FILES['pimage']['tmp_name'];
 	  	  	  $folder="../upload/".$filename;
+
+	  	  	  if($pname == ""){
+	  	  	  	$_SESSION['error']="please enter pname";
+	  	  	  	header("Location:".$this->base_url."productadd");
+	  	  	  }
 
 	  	  	  if(move_uploaded_file($temp, $folder)){
 	  	  	  	echo "suucess fully uploaded";
@@ -70,6 +77,23 @@ class Controller extends Model{
 	  public function test(){
 	  	echo "test";
 	  }
+	  public function viewcate(){
+	  	$category=$this->select_data('category');
+	  	include('../View/categoryview.php');
+	  }
+	  public function delete_product(){
+	  	if(isset($_REQUEST['pid'])){
+	  		$id=$_REQUEST['pid'];
+	  		$this->delete_data('product',['pid'=>$id]);
+	  		header("Location:".$this->base_url."productview");
+	  	}
+	  }
+	  public function update_product(){
+	  	$id=$_REQUEST['pid'];
+	  	$editdata=$this->select_where('product',['pid'=>$id]);
+	  	$editdata=$editdata[0];
+	  	include("../View/productadd.php");
+	  }
 }
 $obj=new Controller();
 
@@ -96,6 +120,16 @@ if(isset($_SERVER['PATH_INFO'])){
 		case '/catinsert' :
 		$obj->catadddata();
 		break;  
+		case '/viewcat':
+		$obj->viewcate();
+		break;
+		case '/delete_product':
+		$obj->delete_product();
+		break;
+		case '/update_product':
+		$obj->update_product();
+		break;
+
 
 		
 		default:

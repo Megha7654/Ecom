@@ -61,6 +61,24 @@
               </p>
             </a>
           </li>  
+          <li class="nav-item menu-open">
+            <a href="<?php echo $this->base_url; ?>catadd" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Add Category
+               
+              </p>
+            </a>
+          </li>  
+          <li class="nav-item menu-open">
+            <a href="<?php echo $this->base_url; ?>viewcat" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                View Category
+               
+              </p>
+            </a>
+          </li>  
          
         </ul>
       </nav>
