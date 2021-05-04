@@ -10,11 +10,12 @@ class Controller extends Model{
 	  	 parent::__construct();
 	  	 $this->site_url="http://localhost/laravel_revision/MVC/AdminLTE-master/";
 	  	 $this->base_url="http://localhost/laravel_revision/MVC/AdminLTE-master/Controller/Controller.php/";
+	  	 
 	  	  
 	  }
 
 	  public function index(){
-	  	include("../View/index.php");
+	  	include("../View/login.php");
 	  }
 
 	  public function product_create(){
@@ -94,6 +95,74 @@ class Controller extends Model{
 	  	$editdata=$editdata[0];
 	  	include("../View/productadd.php");
 	  }
+	  public function editdata(){
+	  	if(isset($_REQUEST['pname'])){
+	  		  $pid=$_REQUEST['pid'];
+	  	  	  $pname=$_REQUEST['pname'];
+	  	  	  $desc=$_REQUEST['desc'];
+	  	  	  $qty=$_REQUEST['qty'];
+	  	  	  $price=$_REQUEST['price'];
+	  	  	  $filename=$_FILES['pimage']['name'];
+	  	  	  $type=$_FILES['pimage']['type'];
+	  	  	  $temp=$_FILES['pimage']['tmp_name'];
+	  	  	  $folder="../upload/".$filename;
+
+	  	  	  if($pname == ""){
+	  	  	  	$_SESSION['error']="please enter pname";
+	  	  	  	header("Location:".$this->base_url."productadd");
+	  	  	  }
+
+	  	  	  if(move_uploaded_file($temp, $folder)){
+	  	  	  	echo "suucess fully uploaded";
+	  	  	  }
+	  	  	  else{
+	  	  	  	echo "fail";
+	  	  	  }
+	  	  	  $inser_data=[
+	  	  	  	'pname'=>$pname,
+	  	  	  	'description'=>$desc,
+	  	  	  	'image'=>$filename,
+	  	  	  	'price'=>$price,
+	  	  	  	'qty'=>$qty,
+	  	  	  	'subcat_id	'=>1
+	  	  	  ];
+	  	  	  $this->update_data_tbl('product',$inser_data,['pid'=>$pid]);
+	  	  	  header("Location:".$this->base_url."productview");
+
+	  	  }
+
+	  }
+	   public function cookiesex(){
+            setcookie("uname1","Megha",time()+60);
+       }
+       public function cookiesget(){
+       		if(isset($_COOKIE['uname1'])){
+       			echo $_COOKIE['uname1'];
+       			unset($_COOKIE['uname1']);
+       		}
+       	}
+       public function login(){
+       	 if(isset($_REQUEST['loginname'])){
+       	 	$email=$_REQUEST['loginname'];
+       	 	$pass=$_REQUEST['loginpass'];
+       	 	$where=['email'=>$email,"password"=>$pass];
+       	 	$data=$this->select_where('user',$where);
+       	 	$count=count($data);
+       	 	if($count==1){
+       	 		$_SESSION['userdata']=$data[0];
+       	 		header("Location:".$this->base_url."productview");
+
+       	 	}
+       	 	else{
+       	 		echo "login fail";
+       	 	}
+       	 }
+       	 
+       }
+       public function logout(){
+       	session_destroy();
+       	header("Location:".$this->base_url);
+       }	
 }
 $obj=new Controller();
 
@@ -128,6 +197,21 @@ if(isset($_SERVER['PATH_INFO'])){
 		break;
 		case '/update_product':
 		$obj->update_product();
+		break;
+		case '/editProduct':
+		$obj->editdata();
+		break;
+		case '/cokset':
+		$obj->cookiesex();
+		break;
+		case '/cokget':
+		$obj->cookiesget();
+		break;
+		case '/login':
+		$obj->login();
+		break;
+		case '/logout':
+		$obj->logout();
 		break;
 
 

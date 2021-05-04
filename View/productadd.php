@@ -54,7 +54,14 @@
               session_destroy();
             }
             ?>
-  <form class="form-horizontal" enctype="multipart/form-data" method="post" action="<?php echo $this->base_url?>add" >
+  <form class="form-horizontal" enctype="multipart/form-data" method="post" action="<?php 
+   if(isset($_REQUEST['pid'])){
+    echo $this->base_url.'editProduct?pid='.$_REQUEST['pid'];
+   }
+   else{
+     echo $this->base_url.'add';
+   }
+  ?>"
   <div class="form-group">
     <label class="control-label col-md-4" for="email">ProductName</label>
     <div class="col-md-8">

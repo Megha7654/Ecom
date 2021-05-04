@@ -49,8 +49,29 @@
            while($row=$res->fetch_object()){
               $rw[]=$row;
            }
-           return $rw;
+           return $rw ?? [];
        }
+
+       public function update_data_tbl($table,$inser_data,$where){
+        //update product set pn=1 ,pi=1, where pid=2
+        $count=count($inser_data);
+        $i=0;
+        $query="update $table set ";
+        foreach ($inser_data as $key => $value) {
+           if($i< $count-1)
+            $query.= $key ." = '".$value."' ,";
+          else
+            $query.= $key ." = '".$value."'";
+          $i++;
+         } 
+        $query.=" where 1=1";
+         foreach ($where as $key => $value) {
+             $query.= " AND ".$key. " = '".$value."'";
+           }
+        $this->connection->query($query);
+       }
+
+
 
  }
 
