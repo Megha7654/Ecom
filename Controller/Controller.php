@@ -102,22 +102,29 @@ class Controller extends Model{
 	  	  	  $desc=$_REQUEST['desc'];
 	  	  	  $qty=$_REQUEST['qty'];
 	  	  	  $price=$_REQUEST['price'];
-	  	  	  $filename=$_FILES['pimage']['name'];
-	  	  	  $type=$_FILES['pimage']['type'];
-	  	  	  $temp=$_FILES['pimage']['tmp_name'];
-	  	  	  $folder="../upload/".$filename;
+	  	  	  if($_FILES['pimage']['name']){
+		  	  	  	 $filename=$_FILES['pimage']['name'];
+		  	  	  $type=$_FILES['pimage']['type'];
+		  	  	  $temp=$_FILES['pimage']['tmp_name'];
+		  	  	  $folder="../upload/".$filename;
+		  	  	   if(move_uploaded_file($temp, $folder)){
+		  	  	  	echo "suucess fully uploaded";
+		  	  	  }
+		  	  	  else{
+		  	  	  	echo "fail";
+		  	  	  }
 
+	  	  	  }
+	  	  	  else{
+	  	  	  	$filename=$_REQUEST['img'];
+	  	  	  }
+	  	  	 
 	  	  	  if($pname == ""){
 	  	  	  	$_SESSION['error']="please enter pname";
 	  	  	  	header("Location:".$this->base_url."productadd");
 	  	  	  }
 
-	  	  	  if(move_uploaded_file($temp, $folder)){
-	  	  	  	echo "suucess fully uploaded";
-	  	  	  }
-	  	  	  else{
-	  	  	  	echo "fail";
-	  	  	  }
+	  	  	 
 	  	  	  $inser_data=[
 	  	  	  	'pname'=>$pname,
 	  	  	  	'description'=>$desc,
@@ -162,6 +169,49 @@ class Controller extends Model{
        public function logout(){
        	session_destroy();
        	header("Location:".$this->base_url);
+       }
+       public function productfind(){
+       	  if(isset($_REQUEST['str'])){
+       	  	$ch=$_REQUEST['str'];
+       	  	$arr=['pname'=>$ch];
+       	  	$productdata=$this->select_like("product",$arr);
+       	  	?>
+       	  	<table class="table" id="">
+                  <thead>
+                    <tr>
+                      <th>Pid</th>
+                      <th>ProductName</th>
+                      <th>Description</th>
+                      <th>Image</th>
+                      <th>Price</th>
+                      <th>Qty</th>
+                      <th colspan="2">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                   <?php 
+                   foreach ($productdata as $key) {
+                     ?>
+                     <tr>
+                      <td><?php echo $key->pid ?></td>
+                       <td><?php echo $key->pname ?></td>
+                       <td><?php echo $key->description;?></td>
+                       <td>
+                         <img src="<?php echo $this->site_url?>upload/<?php echo $key->image;?>" height="100px" width="100px">
+                       </td>
+                       <td><?php echo $key->price; ?></td>
+                       <td><?php echo $key->qty;?></td>
+                       <td><a href="<?php echo $this->base_url.'delete_product?pid='.$key->pid?>">DELETE</a></td>
+                       <td><a href="<?php echo $this->base_url.'update_product?pid='.$key->pid?>">UPDATE</a></td>
+                     </tr>
+                     <?php
+                   }
+                    ?>
+                  </tbody>
+
+       	  	<?php
+
+       	  }
        }	
 }
 $obj=new Controller();
@@ -212,6 +262,9 @@ if(isset($_SERVER['PATH_INFO'])){
 		break;
 		case '/logout':
 		$obj->logout();
+		break;
+		case '/productfind':
+		$obj->productfind();
 		break;
 
 

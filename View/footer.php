@@ -18,6 +18,31 @@
 <script src="<?php echo $this->site_url?>/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="<?php echo $this->site_url?>/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript">
+  function GetProduct(str){
+    $.ajax({
+      type:"POST",
+      url:"<?php echo $this->base_url?>productfind",
+      data:"str="+str,
+      success:function(response){
+         $("#tbl").html(response);
+      }
+
+    });
+  }
+/*product zoomin zoomout*/
+$(".pimg").mouseenter(function(){
+    var id= this.id;
+    $("#"+id).css('height','500px');
+    $("#"+id).css('width','500px');
+});
+$(".pimg").mouseleave(function(){
+    var id= this.id;
+    $("#"+id).css('height','100px');
+    $("#"+id).css('width','100px');
+});
+
+</script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button)
@@ -48,5 +73,7 @@
 <script src="<?php echo $this->site_url?>/dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="<?php echo $this->site_url?>/dist/js/pages/dashboard.js"></script>
+
+
 </body>
 </html>

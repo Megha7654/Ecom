@@ -71,6 +71,19 @@
         $this->connection->query($query);
        }
 
+       public function select_like($table,$data){
+
+        //select * from product where productname like '%s%';
+        $key= implode(",", array_keys($data));
+        $value=implode("','", array_values($data));
+         $query="select * from $table where  $key like '%$value%'";
+        $res=$this->connection->query($query);
+           while($row=$res->fetch_object()){
+              $rw[]=$row;
+           }
+           return $rw ?? [];
+       }
+
 
 
  }

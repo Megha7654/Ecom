@@ -45,8 +45,13 @@
 
             
            <h1>Product view</h1>
-                     
-                <table class="table">
+        <div class="input-group">
+            <input type="search" class="form-control rounded" placeholder="Search Product" aria-label="Search"
+              aria-describedby="search-addon"  onkeyup="GetProduct(this.value)" />
+            
+        </div>
+              <div id="tbl">     
+                <table class="table" id="">
                   <thead>
                     <tr>
                       <th>Pid</th>
@@ -66,7 +71,9 @@
                       <td><?php echo $key->pid ?></td>
                        <td><?php echo $key->pname ?></td>
                        <td><?php echo $key->description;?></td>
-                       <td><?php echo $key->image;?></td>
+                       <td>
+                         <img src="<?php echo $this->site_url?>upload/<?php echo $key->image;?>" height="100px" width="100px" id="pimage_<?php  echo $key->pid ?>" class="pimg">
+                       </td>
                        <td><?php echo $key->price; ?></td>
                        <td><?php echo $key->qty;?></td>
                        <td><a href="<?php echo $this->base_url.'delete_product?pid='.$key->pid?>">DELETE</a></td>
@@ -77,6 +84,7 @@
                     ?>
                   </tbody>
                 </table>
+              </div>
           </section>
           <!-- right col -->
         </div>

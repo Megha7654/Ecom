@@ -80,6 +80,7 @@
       <?php if(isset($_REQUEST['pid'])){
         ?>
         <img height="100px" width="100px" src="<?php echo $this->site_url?>/upload/<?php echo $editdata->image ?? ''?>">
+        <input type="hidden" name="img" value="<?php echo $editdata->image ?? ''?>">
         <?php
 
       } ?>
