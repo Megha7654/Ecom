@@ -1,31 +1,63 @@
-<?php 
-include("../Model/Model.php");
+<?php
+include("Model/Model.php");
 session_start();
-class Controller extends Model{
+class Controller {
 
       public $site_url;
       public $base_url;
+      public $model;
 	  public function __construct(){
+	  	$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+	 
+		$url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		//echo "<br>in c".$url;
 
-	  	 parent::__construct();
+	  	 $this->model=new model();
 	  	 $this->site_url="http://localhost/laravel_revision/MVC/AdminLTE-master/";
-	  	 $this->base_url="http://localhost/laravel_revision/MVC/AdminLTE-master/Controller/Controller.php/";
+	  	 $this->base_url=$url;
+
+	  	 $url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+
+		$uriSegments = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+
 	  	 
 	  	  
 	  }
 
 	  public function index(){
-	  	include("../View/login.php");
+	  	include("View/login.php");
+	  	
+
 	  }
 
 	  public function product_create(){
-	  	  include("../View/productadd.php");
+	  	  include("View/productadd.php");
 	  	  
 	  }
 
 	  public function product_show(){
-	  	$productdata=$this->select_data('product');
-	  	include("../View/productview.php");
+
+	  	$productdata=$this->model->select_data('product');
+	  	if(isset($_REQUEST['page'])){
+	  		$page=$_REQUEST['page'];
+	  	}
+	  	else{
+	  		$page=1;
+	  	}
+	  
+	  	$count=count($productdata);
+	  	$perpage=1;
+	  	$totalpage=ceil($count/$perpage);
+	  	$offset=($page-1)*$perpage;
+	  	$tabledata=$this->model->select_limit("product",$offset,$perpage);
+	  	if(isset($_REQUEST['muldel'])){
+	  		$id=$_REQUEST['del'];
+	  		$this->model->multiple_delete("product",$id,'pid');
+	  		header("Location:productview");
+	  	}
+	  	include("View/productview.php");
+
 	  }
 	  public function addProduct(){
 	  	  if(isset($_REQUEST['pname'])){
@@ -37,11 +69,11 @@ class Controller extends Model{
 	  	  	  $filename=$_FILES['pimage']['name'];
 	  	  	  $type=$_FILES['pimage']['type'];
 	  	  	  $temp=$_FILES['pimage']['tmp_name'];
-	  	  	  $folder="../upload/".$filename;
+	  	  	  $folder="upload/".$filename;
 
 	  	  	  if($pname == ""){
 	  	  	  	$_SESSION['error']="please enter pname";
-	  	  	  	header("Location:".$this->base_url."productadd");
+	  	  	  	header("Location:productadd");
 	  	  	  }
 
 	  	  	  if(move_uploaded_file($temp, $folder)){
@@ -58,12 +90,14 @@ class Controller extends Model{
 	  	  	  	'qty'=>$qty,
 	  	  	  	'subcat_id	'=>1
 	  	  	  ];
-	  	  	  $this->insert_data_tbl('product',$inser_data);
+	  	  	  $this->model->insert_data_tbl('product',$inser_data);
+	  	  	  header("Location:productview");
+
 
 	  	  }
 	  }
 	  public function cat_create(){
-	  	include("../View/catadd.php");
+	  	include("View/catadd.php");
 	  }
 	  public function catadddata(){
 	  		if(isset($_REQUEST['cname'])){
@@ -72,7 +106,8 @@ class Controller extends Model{
 	  	  	  $inser_data=[
 	  	  	  	'cname'=>$cname
 	  	  	  ];
-	  	  	  $this->insert_data_tbl('category',$inser_data);
+	  	  	  $this->model->insert_data_tbl('category',$inser_data);
+	  	  	  header("Location:productview");
 	  	  	}
 	  }
 	  public function test(){
@@ -80,20 +115,20 @@ class Controller extends Model{
 	  }
 	  public function viewcate(){
 	  	$category=$this->select_data('category');
-	  	include('../View/categoryview.php');
+	  	include('View/categoryview.php');
 	  }
 	  public function delete_product(){
 	  	if(isset($_REQUEST['pid'])){
 	  		$id=$_REQUEST['pid'];
-	  		$this->delete_data('product',['pid'=>$id]);
-	  		header("Location:".$this->base_url."productview");
+	  		$this->model->delete_data('product',['pid'=>$id]);
+	  		header("Location:productview");
 	  	}
 	  }
 	  public function update_product(){
 	  	$id=$_REQUEST['pid'];
-	  	$editdata=$this->select_where('product',['pid'=>$id]);
+	  	$editdata=$this->model->select_where('product',['pid'=>$id]);
 	  	$editdata=$editdata[0];
-	  	include("../View/productadd.php");
+	  	include("View/productadd.php");
 	  }
 	  public function editdata(){
 	  	if(isset($_REQUEST['pname'])){
@@ -121,7 +156,7 @@ class Controller extends Model{
 	  	  	 
 	  	  	  if($pname == ""){
 	  	  	  	$_SESSION['error']="please enter pname";
-	  	  	  	header("Location:".$this->base_url."productadd");
+	  	  	  	header("Location:productadd");
 	  	  	  }
 
 	  	  	 
@@ -133,8 +168,8 @@ class Controller extends Model{
 	  	  	  	'qty'=>$qty,
 	  	  	  	'subcat_id	'=>1
 	  	  	  ];
-	  	  	  $this->update_data_tbl('product',$inser_data,['pid'=>$pid]);
-	  	  	  header("Location:".$this->base_url."productview");
+	  	  	  $this->model->update_data_tbl('product',$inser_data,['pid'=>$pid]);
+	  	  	  header("Location:productview");
 
 	  	  }
 
@@ -153,11 +188,11 @@ class Controller extends Model{
        	 	$email=$_REQUEST['loginname'];
        	 	$pass=$_REQUEST['loginpass'];
        	 	$where=['email'=>$email,"password"=>$pass];
-       	 	$data=$this->select_where('user',$where);
+       	 	$data=$this->model->select_where('user',$where);
        	 	$count=count($data);
        	 	if($count==1){
        	 		$_SESSION['userdata']=$data[0];
-       	 		header("Location:".$this->base_url."productview");
+       	 		header("Location:productview");
 
        	 	}
        	 	else{
@@ -168,13 +203,13 @@ class Controller extends Model{
        }
        public function logout(){
        	session_destroy();
-       	header("Location:".$this->base_url);
+       	header("Location: ");
        }
        public function productfind(){
        	  if(isset($_REQUEST['str'])){
        	  	$ch=$_REQUEST['str'];
        	  	$arr=['pname'=>$ch];
-       	  	$productdata=$this->select_like("product",$arr);
+       	  	$productdata=$this->model->select_like("product",$arr);
        	  	?>
        	  	<table class="table" id="">
                   <thead>
@@ -214,65 +249,9 @@ class Controller extends Model{
        	  }
        }	
 }
+
 $obj=new Controller();
 
-if(isset($_SERVER['PATH_INFO'])){
-	switch ($_SERVER['PATH_INFO']) {
-		case '/':
-			$obj->index();
-			break;
-		case '/productadd':
-			$obj->product_create();
-			break;
-		case '/productview':
-			$obj->product_show();
-			break;	
-		case '/test':
-			$obj->test();
-			break;	
-		case '/add':
-		   $obj->addProduct();
-		   break;	
-		case '/catadd':
-		  $obj->cat_create();
-		  break;
-		case '/catinsert' :
-		$obj->catadddata();
-		break;  
-		case '/viewcat':
-		$obj->viewcate();
-		break;
-		case '/delete_product':
-		$obj->delete_product();
-		break;
-		case '/update_product':
-		$obj->update_product();
-		break;
-		case '/editProduct':
-		$obj->editdata();
-		break;
-		case '/cokset':
-		$obj->cookiesex();
-		break;
-		case '/cokget':
-		$obj->cookiesget();
-		break;
-		case '/login':
-		$obj->login();
-		break;
-		case '/logout':
-		$obj->logout();
-		break;
-		case '/productfind':
-		$obj->productfind();
-		break;
 
-
-		
-		default:
-			# code...
-			break;
-	}
-}
 
  ?>

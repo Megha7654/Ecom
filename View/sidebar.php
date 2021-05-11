@@ -37,7 +37,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
-            <a href="<?php echo $this->base_url; ?>" class="nav-link active">
+            <a href="" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -46,7 +46,7 @@
             </a>
           </li>  
           <li class="nav-item menu-open">
-            <a href="<?php echo $this->base_url; ?>productadd" class="nav-link active">
+            <a href="productadd" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Add Product
@@ -55,7 +55,7 @@
             </a>
           </li>  
           <li class="nav-item menu-open">
-            <a href="<?php echo $this->base_url; ?>productview" class="nav-link active">
+            <a href="productview" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 View Product
@@ -64,7 +64,7 @@
             </a>
           </li>  
           <li class="nav-item menu-open">
-            <a href="<?php echo $this->base_url; ?>catadd" class="nav-link active">
+            <a href="catadd" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Add Category
@@ -73,7 +73,7 @@
             </a>
           </li>  
           <li class="nav-item menu-open">
-            <a href="<?php echo $this->base_url; ?>viewcat" class="nav-link active">
+            <a href="viewcat" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 View Category
@@ -82,7 +82,7 @@
             </a>
           </li>  
           <li class="nav-item menu-open">
-            <a href="<?php echo $this->base_url; ?>logout" class="nav-link active">
+            <a href="logout" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Logout

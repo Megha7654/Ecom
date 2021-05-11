@@ -1,4 +1,6 @@
+
 <?php 
+
  class Model{
     
        public $connection;   
@@ -38,6 +40,20 @@
            }
            $this->connection->query($del);
 
+       }
+       public function select_limit($table,$start,$end){
+        $query="select * from $table limit $start,$end";
+        $res=$this->connection->query($query);
+            while($row=$res->fetch_object()){
+               $rw[]=$row;
+            }
+            return $rw;
+       }
+
+       public function multiple_delete($table,$where,$value){
+        $id= implode(",", $where);
+        $query="delete from $table where $value in($id)";
+        $this->connection->query($query);
        }
 
        public function select_where($table,$where){

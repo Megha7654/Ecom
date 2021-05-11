@@ -3,7 +3,19 @@
 <?php include("head.php"); ?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
+<style type="text/css">
+  .disabled {
+    pointer-events:none; //This makes it not clickable
+    opacity:0.6;         //This grays it out to look disabled
+}
+.mainlist .listdata{
+  width: 50px;
+  border:1px solid #3997F4;
+  border-radius: 30px;
+  display: inline-block;
+  text-align: center
+}
+</style>
   
 
   <!-- Navbar -->
@@ -54,6 +66,7 @@
                 <table class="table" id="">
                   <thead>
                     <tr>
+                      <th>#</th>
                       <th>Pid</th>
                       <th>ProductName</th>
                       <th>Description</th>
@@ -64,26 +77,53 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <form method="post">
                    <?php 
-                   foreach ($productdata as $key) {
+                   if($tabledata){
+                   foreach ($tabledata as $key) {
                      ?>
                      <tr>
+
+                      <td><input type="checkbox" name="del[]" value="<?php echo $key->pid;?>"></td>
                       <td><?php echo $key->pid ?></td>
                        <td><?php echo $key->pname ?></td>
                        <td><?php echo $key->description;?></td>
                        <td>
-                         <img src="<?php echo $this->site_url?>upload/<?php echo $key->image;?>" height="100px" width="100px" id="pimage_<?php  echo $key->pid ?>" class="pimg">
+                         <img src="<?php echo $this->site_url?>upload/<?php echo $key->image;?>" height="50px" width="50px" id="pimage_<?php  echo $key->pid ?>" class="pimg">
                        </td>
                        <td><?php echo $key->price; ?></td>
                        <td><?php echo $key->qty;?></td>
-                       <td><a href="<?php echo $this->base_url.'delete_product?pid='.$key->pid?>">DELETE</a></td>
-                       <td><a href="<?php echo $this->base_url.'update_product?pid='.$key->pid?>">UPDATE</a></td>
+                       <td><a href="<?php echo 'delete_product?pid='.$key->pid?>">DELETE</a></td>
+                       <td><a href="<?php echo 'update_product?pid='.$key->pid?>">UPDATE</a></td>
                      </tr>
                      <?php
                    }
+                 }
                     ?>
+                    <tr>
+                     
+                      <td colspan="8" align="left"><input type="submit" name="muldel" class="btn btn-danger" value="DELETE"></td>
+                   
+                    </tr>
+                     </form>
                   </tbody>
                 </table>
+                <ul class="pagination mainlist">
+                  <li class="listdata" ><a href="?page=1">first</a></li>
+                  <li class="listdata" <?php if($page<=1){echo 'hidden';}?>><a href="
+                  <?php
+                  if($totalpage<=1 ){echo "#";}
+                  else{echo "?page=".($page-1);}
+                  ?>">
+                    prev
+                  </a></li>
+                  
+                  <li class="listdata" <?php if($page>=$totalpage){echo 'hidden';}?>><a href="<?php
+                  if($page >= $totalpage){echo "#";}
+                  else{echo "?page=".($page+1);}
+                  ?>">next</a></li>
+                  <li class="listdata"><a href="?page=<?php echo $totalpage;?>">last</a></li>
+                </ul>
               </div>
           </section>
           <!-- right col -->

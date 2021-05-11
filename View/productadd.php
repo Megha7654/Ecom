@@ -56,10 +56,10 @@
             ?>
   <form class="form-horizontal" enctype="multipart/form-data" method="post" action="<?php 
    if(isset($_REQUEST['pid'])){
-    echo $this->base_url.'editProduct?pid='.$_REQUEST['pid'];
+    echo 'editProduct?pid='.$_REQUEST['pid'];
    }
    else{
-     echo $this->base_url.'add';
+     echo 'add';
    }
   ?>"
   <div class="form-group">
