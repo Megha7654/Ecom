@@ -282,9 +282,9 @@ input[type=text]:placeholder {
 
     <!-- Login Form -->
     <form action="<?php echo $this->base_url?>login" method="post">
-      <input type="text" id="login" class="fadeIn second" name="loginname" placeholder="login">
-      <input type="password" id="password" class="fadeIn third" name="loginpass" placeholder="password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
+      <input type="text"  class="fadeIn second" name="loginname" placeholder="login" id="email">
+      <input type="password"  class="fadeIn third" name="loginpass" placeholder="password" id="pass">
+      <input type="submit" class="fadeIn fourth" value="Log In" onclick="return validation()">
     </form>
 
     <!-- Remind Passowrd -->
@@ -297,6 +297,27 @@ input[type=text]:placeholder {
 
 
 
+<script type="text/javascript">
+  function validation(){
+    var re=/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    var email= document.getElementById("email").value;
+    if(email == ""){
+      alert("enter email id");
+      document.getElementById("email").focus();
+      return false;
+    }
+    if(email.match(re)){
+      return true;
+    }
+    else{
+       alert("enter valid email");
+       document.getElementById("email").value="";
+       document.getElementById("email").focus();
+        return false;
+    }
 
+  }
+
+</script>
 </body>
 </html>

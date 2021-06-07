@@ -6,7 +6,9 @@ class Controller {
       public $site_url;
       public $base_url;
       public $model;
+      public $fp;
 	  public function __construct(){
+       
 	  	$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 	 
 		$url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -14,6 +16,7 @@ class Controller {
 
 	  	 $this->model=new model();
 	  	 $this->site_url="http://localhost/laravel_revision/MVC/AdminLTE-master/";
+	  	  $this->fp= fopen("log.html","a");
 	  	 $this->base_url=$url;
 
 	  	 $url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -23,6 +26,9 @@ class Controller {
 
 	  	 
 	  	  
+	  }
+	  public function __destruct(){
+	  	fclose($this->fp);
 	  }
 
 	  public function index(){
@@ -38,6 +44,11 @@ class Controller {
 
 	  public function product_show(){
 
+	  	if(isset($_SESSION['userdata'])){
+	  		fwrite($this->fp, "<h1>product_show called</h1>
+	  			<p>".$_SESSION['userdata']->email.date("y-m-d H:i:s")."</p>");
+	  	}
+        
 	  	$productdata=$this->model->select_data('product');
 	  	if(isset($_REQUEST['page'])){
 	  		$page=$_REQUEST['page'];
